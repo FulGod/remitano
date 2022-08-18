@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Dislike;
+use App\Models\Like;
 use App\Models\Share;
 use Exception;
 use Illuminate\Http\Request;
@@ -47,7 +49,26 @@ class HomeController extends Controller
             Share::create($validated);
             return redirect()->route('home');
         } catch (Exception $e) {
+            logger($e);
         }
         return back()->withInput();
+    }
+
+    public function like($share)
+    {
+        Like::create([
+            'share_id' => $share,
+            'user_id' => Auth::id()
+        ]);
+        return redirect()->route('home');
+    }
+
+    public function dislike($share)
+    {
+        Dislike::create([
+            'share_id' => $share,
+            'user_id' => Auth::id()
+        ]);
+        return redirect()->route('home');
     }
 }

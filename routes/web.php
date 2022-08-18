@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('share', [HomeController::class, 'share'])->name('share');
 Route::post('share', [HomeController::class, 'store'])->name('store-share');
+Route::get('like/{share}', [HomeController::class, 'like'])->name('like');
+Route::get('dislike/{share}', [HomeController::class, 'dislike'])->name('dislike');
 
 Route::middleware([
     'auth:sanctum',
