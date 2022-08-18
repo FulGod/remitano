@@ -16,14 +16,23 @@
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                <div class="hidden justify-end space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-jet-nav-link href="{{ route('share') }}" :active="request()->routeIs('share')">
                         {{ __('Share a movie') }}
                     </x-jet-nav-link>
+                    @guest
+                    <x-jet-nav-link href="{{ route('login') }}" :active="request()->routeIs('login')">
+                        {{ __('Login') }}
+                    </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('register') }}" :active="request()->routeIs('register')">
+                        {{ __('Register') }}
+                    </x-jet-nav-link>
+                    @endguest
                 </div>
             </div>
 
             <div class="hidden sm:flex sm:items-center sm:ml-6">
+                @auth
                 <!-- Teams Dropdown -->
                 @if (Laravel\Jetstream\Jetstream::hasTeamFeatures())
                     <div class="ml-3 relative">
@@ -125,6 +134,8 @@
                         </x-slot>
                     </x-jet-dropdown>
                 </div>
+                @else
+                @endauth
             </div>
 
             <!-- Hamburger -->
@@ -142,13 +153,22 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
+            <x-jet-responsive-nav-link href="{{ route('share') }}" :active="request()->routeIs('share')">
+                {{ __('Share a movie') }}
             </x-jet-responsive-nav-link>
+            @guest
+            <x-jet-responsive-nav-link href="{{ route('login') }}" :active="request()->routeIs('login')">
+                {{ __('Login') }}
+            </x-jet-responsive-nav-link>
+            <x-jet-responsive-nav-link href="{{ route('register') }}" :active="request()->routeIs('register')">
+                {{ __('Register') }}
+            </x-jet-responsive-nav-link>
+            @endguest
         </div>
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
+            @auth
             <div class="flex items-center px-4">
                 @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
                     <div class="shrink-0 mr-3">
@@ -215,6 +235,8 @@
                     @endforeach
                 @endif
             </div>
+            @else
+            @endauth
         </div>
     </div>
 </nav>

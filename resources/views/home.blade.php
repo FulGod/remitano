@@ -2,15 +2,17 @@
     <div class="py-5">
         <div class="max-w-4xl mx-auto">
             <div class="grid grid-cols-1 gap-5">
+                @foreach ($shares as $share)
                 <div class="bg-white m-4 shadow-xl sm:rounded-lg">
                     <div class="grid grid-cols-2 gap-5">
                         <div class="flex items-center">
-                            <div id="ytplayer"></div>
+                            <div id="ytplayer{{ $share->id }}"></div>
                         </div>
 
                         <div class="mt-2 p-3 text-gray-600 dark:text-gray-400 text-sm">
                             <div class="flex items-center justify-between">
-                                <div class="font-bold text-lg text-red-600">Title</div>
+                                <div class="font-bold text-lg text-red-600">{{ $share->title }}</div>
+                                @auth
                                 <div class="flex items-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
                                         <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
@@ -19,8 +21,9 @@
                                         <path d="M18 9.5a1.5 1.5 0 11-3 0v-6a1.5 1.5 0 013 0v6zM14 9.667v-5.43a2 2 0 00-1.105-1.79l-.05-.025A4 4 0 0011.055 2H5.64a2 2 0 00-1.962 1.608l-1.2 6A2 2 0 004.44 12H8v4a2 2 0 002 2 1 1 0 001-1v-.667a4 4 0 01.8-2.4l1.4-1.866a4 4 0 00.8-2.4z" />
                                     </svg>
                                 </div>
+                                @endauth
                             </div>
-                            <div>Shared by: </div>
+                            <div>Shared by: {{ $share->user->name }}</div>
                             <div class="flex items-center">
                                 <div class="flex items-center mr-3">
                                     <div>89</div>
@@ -36,39 +39,14 @@
                                 </div>
                             </div>
                             <div>Description:</div>
-                            <div class="font-bold text-black">Laravel has wonderful, thorough documentation covering every aspect of the framework. Whether you are new to the framework or have previous experience with Laravel, we recommend reading all of the documentation from beginning to end.</div>
+                            <div class="font-bold text-black">{{ $share->desc }}</div>
                         </div>
                     </div>
                 </div>
-
-                <div class="bg-white m-4 shadow-xl sm:rounded-lg">
-                    <div class="grid grid-cols-2 gap-5">
-                        <div class="flex items-center">
-                            <div id="ytplayer1"></div>
-                        </div>
-
-                        <div class="mt-2 p-3 text-gray-600 dark:text-gray-400 text-sm">
-                            <div class="font-bold text-lg text-red-600">Title</div>
-                            <div>Shared by: </div>
-                            <div class="flex items-center">
-                                <div class="flex items-center mr-3">
-                                    <div>89</div>
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-                                    </svg>
-                                </div>
-                                <div class="flex items-center">
-                                    <div>50</div>
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M18 9.5a1.5 1.5 0 11-3 0v-6a1.5 1.5 0 013 0v6zM14 9.667v-5.43a2 2 0 00-1.105-1.79l-.05-.025A4 4 0 0011.055 2H5.64a2 2 0 00-1.962 1.608l-1.2 6A2 2 0 004.44 12H8v4a2 2 0 002 2 1 1 0 001-1v-.667a4 4 0 01.8-2.4l1.4-1.866a4 4 0 00.8-2.4z" />
-                                    </svg>
-                                </div>
-                            </div>
-                            <div>Description:</div>
-                            <div class="font-bold text-black">Laravel has wonderful, thorough documentation covering every aspect of the framework. Whether you are new to the framework or have previous experience with Laravel, we recommend reading all of the documentation from beginning to end.</div>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
+            </div>
+            <div class="p-5">
+                {{ $shares->links() }}
             </div>
         </div>
     </div>
@@ -89,16 +67,13 @@
         // YouTube player after the API code downloads.
         var player;
         function onYouTubePlayerAPIReady() {
-            player = new YT.Player('ytplayer', {
+            @foreach ($shares as $share)
+            player = new YT.Player('ytplayer{{ $share->id }}', {
                 height: '270',
                 width: '480',
-                videoId: youtube_parser('https://www.youtube.com/watch?v=k2AuWmOoaYE')
+                videoId: youtube_parser('{{ $share->url }}')
             });
-            player = new YT.Player('ytplayer1', {
-                height: '270',
-                width: '480',
-                videoId: youtube_parser('https://www.youtube.com/watch?v=pU3O9Lnp-Z0')
-            });
+            @endforeach
         }
     </script>
 </x-app-layout>

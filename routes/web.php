@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('share', [HomeController::class, 'share'])->name('share');
+Route::post('share', [HomeController::class, 'store'])->name('store-share');
 
 Route::middleware([
     'auth:sanctum',
